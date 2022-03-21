@@ -7,15 +7,13 @@ import '../components/Weather.css';
 
 
 const Weather = () => {
-
+    const [searchStr, setSearchStr] = useState('London');
     const [ weather, setWeather] = useState(null)
     const [ location, setLocation] = useState(null)
     const [ forecast, setForecast] = useState(null)
 
-useEffect(() => {
-
-    async function getWeather(){
-        const resp = await fetch('http://api.weatherapi.com/v1/forecast.json?key=17e70e0a9795468eb83221716222003&q=London&days=7&aqi=no&alerts=no');
+    const getWeather = async () => {
+        const resp = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=17e70e0a9795468eb83221716222003&q=${searchStr}&days=7&aqi=no&alerts=no`);
         const data = await resp.json()
 
         console.log(data.current)
@@ -26,18 +24,17 @@ useEffect(() => {
 
         console.log(data.forecast)
         setForecast(data.forecast.forecastday)
-        
-    }
+    };
 
-    getWeather()
-
-}, []);
+    useEffect(() => {
+        getWeather();
+    }, []);
 
     return (
         
         <div>
 
-        <input className="searchbar" type="text" title="Search" />
+        <input className="searchbar" value={searchStr} onChange={(e) => setSearchStr(e.target?.value ?? '')} type="text" title="Search" onBlur={() => getWeather()} />
 
             <WeatherCard 
             icon={weather?.condition.icon}
@@ -49,7 +46,11 @@ useEffect(() => {
 
             {forecast?.map(date => (
             <Forecast 
-            maxtemp_f={date.day.maxtemp_f} 
+            maxtemp_f={date.day.maxtemp_f}
+            icon={date.day.condition.icon}
+            sunset={date.astro.sunset}
+            sunrise={date.astro.sunrise} 
+            date={date.date}
             />  
             ))}
             
