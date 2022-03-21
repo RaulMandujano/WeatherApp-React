@@ -1,0 +1,13 @@
+.card-forecast {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    padding: 40px;
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+  }
+  
+  .region-forecast {
+    color: grey;
+    font-size: 22px;
+  }
